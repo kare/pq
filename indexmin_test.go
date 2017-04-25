@@ -1,8 +1,8 @@
-package pq // import "kkn.fi/pq"
+package pq
 
 import "testing"
 
-func TestIndexMinPQ(t *testing.T) {
+func TestDelMin(t *testing.T) {
 	values := []float32{0.7, 0.123, 0.453, 0.23, 0.657, 0.120, 0.4246, 0.12, 0.9999, 0.123123}
 	pq := NewIndexMin(50)
 	for i, v := range values {
@@ -22,7 +22,7 @@ func TestIndexMinPQ(t *testing.T) {
 	}
 }
 
-func TestIndexMinPQBetween(t *testing.T) {
+func TestDelMinInsertBetweenDelete(t *testing.T) {
 	values := []float32{0.7, 0.123, 0.3, 0.453}
 	pq := NewIndexMin(20)
 	for i, v := range values {
