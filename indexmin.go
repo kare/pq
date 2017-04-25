@@ -1,6 +1,6 @@
 package pq // import "kkn.fi/pq"
 
-// IndexMinPQ struct represents an indexed priority queue of int keys. It
+// IndexMin struct represents an indexed priority queue of int keys. It
 // supports the usual Insert and DelMin and DecreaseKey functions. In order to
 // let the client refer to keys on the priority queue, an integer between 0 and
 // max-1 is associated with each key the client uses this integer to specify
@@ -15,7 +15,7 @@ package pq // import "kkn.fi/pq"
 //
 // For additional documentation, see Section 2.4 of Algorithms, 4th Edition by
 // Robert Sedgewick and Kevin Wayne.
-type IndexMinPQ struct {
+type IndexMin struct {
 	max  int
 	len  int
 	pq   []int
@@ -25,12 +25,12 @@ type IndexMinPQ struct {
 
 // NewIndexMin creates a new and empty minimium priority queue with given
 // maximum value for keys. The maximum key index value is max - 1.
-func NewIndexMin(max int) *IndexMinPQ {
+func NewIndexMin(max int) *IndexMin {
 	qp := make([]int, max+1)
 	for i := 0; i <= max; i++ {
 		qp[i] = -1
 	}
-	return &IndexMinPQ{
+	return &IndexMin{
 		max:  max,
 		len:  0,
 		pq:   make([]int, max+1),
@@ -39,24 +39,24 @@ func NewIndexMin(max int) *IndexMinPQ {
 	}
 }
 
-func (pq IndexMinPQ) greater(i, j int) bool {
+func (pq IndexMin) greater(i, j int) bool {
 	return pq.keys[pq.pq[i]] > pq.keys[pq.pq[j]]
 }
 
-func (pq *IndexMinPQ) exch(i, j int) {
+func (pq *IndexMin) exch(i, j int) {
 	pq.pq[j], pq.pq[i] = pq.pq[i], pq.pq[j]
 	pq.qp[pq.pq[i]] = i
 	pq.qp[pq.pq[j]] = j
 }
 
-func (pq *IndexMinPQ) swim(k int) {
+func (pq *IndexMin) swim(k int) {
 	for k > 1 && pq.greater(k/2, k) {
 		pq.exch(k, k/2)
 		k = k / 2
 	}
 }
 
-func (pq *IndexMinPQ) sink(k int) {
+func (pq *IndexMin) sink(k int) {
 	for 2*k <= pq.len {
 		j := 2 * k
 		if j < pq.len && pq.greater(j, j+1) {
@@ -72,7 +72,7 @@ func (pq *IndexMinPQ) sink(k int) {
 
 // Insert a key into the priority queue.
 // If key is out of bounds or exists in the queue function will simply return.
-func (pq *IndexMinPQ) Insert(key int, priority float32) {
+func (pq *IndexMin) Insert(key int, priority float32) {
 	if key < 0 || key >= pq.max {
 		return
 	}
@@ -88,7 +88,7 @@ func (pq *IndexMinPQ) Insert(key int, priority float32) {
 
 // DelMin deletes and returns smallest key.
 // If queue is empty the function returns max.
-func (pq *IndexMinPQ) DelMin() int {
+func (pq *IndexMin) DelMin() int {
 	if pq.len == 0 {
 		return pq.max
 	}
@@ -103,7 +103,7 @@ func (pq *IndexMinPQ) DelMin() int {
 
 // DecreaseKey decreases keys priority.
 // If key is out of bounds or doesn't exist in the queue function will simply return.
-func (pq *IndexMinPQ) DecreaseKey(key int, priority float32) {
+func (pq *IndexMin) DecreaseKey(key int, priority float32) {
 	if key < 0 || key >= pq.max {
 		return
 	}
@@ -115,7 +115,7 @@ func (pq *IndexMinPQ) DecreaseKey(key int, priority float32) {
 }
 
 // Contains returns true if queue contains key and false otherwise.
-func (pq IndexMinPQ) Contains(key int) bool {
+func (pq IndexMin) Contains(key int) bool {
 	if key < 0 || key >= pq.max {
 		panic("index out of bounds")
 	}
@@ -123,11 +123,11 @@ func (pq IndexMinPQ) Contains(key int) bool {
 }
 
 // Len returns the size of the queue.
-func (pq *IndexMinPQ) Len() int {
+func (pq *IndexMin) Len() int {
 	return pq.len
 }
 
 // IsEmpty returns true if queue is empty and false otherwise.
-func (pq *IndexMinPQ) IsEmpty() bool {
+func (pq *IndexMin) IsEmpty() bool {
 	return pq.len == 0
 }
