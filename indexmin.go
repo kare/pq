@@ -123,11 +123,11 @@ func (pq IndexMin) Contains(key int) bool {
 }
 
 // Len returns the size of the queue.
-func (pq *IndexMin) Len() int {
+func (pq IndexMin) Len() int {
 	return pq.len
 }
 
 // IsEmpty returns true if queue is empty and false otherwise.
-func (pq *IndexMin) IsEmpty() bool {
+func (pq IndexMin) IsEmpty() bool {
 	return pq.len == 0
 }
