@@ -1,14 +1,14 @@
 package pq // import "kkn.fi/pq"
 
 // IndexMin struct represents an indexed priority queue of int keys. It
-// supports the usual Insert and DelMin and DecreaseKey functions. In order to
-// let the client refer to keys on the priority queue, an integer between 0 and
-// max-1 is associated with each key the client uses this integer to specify
-// which key to delete or change. It also has a function for testing if the
-// priority queue is empty.
+// supports the usual Insert, DelMin, DecreaseKey and IncreaseKey functions.
+// In order to let the client refer to keys on the priority queue, an integer
+// between 0 and max-1 is associated with each key the client uses this integer
+// to specify which key to delete or change. It also has a function for testing
+// if the priority queue is empty.
 //
 // This implementation uses a binary heap along with an slice to associate keys
-// with floats in the given range. The Insert, DelMin and DecreaseKey
+// with floats in the given range. The Insert, DelMin, DecreaseKey and IncreaseKey
 // operations take logarithmic time. The IsEmpty and Len operations take
 // constant time. Construction takes time proportional to the specified
 // capacity.
@@ -103,7 +103,8 @@ func (pq *IndexMin) DelMin() int {
 }
 
 // DecreaseKey decreases keys priority.
-// If key is out of bounds or doesn't exist in the queue function will simply return.
+// If key is out of bounds or doesn't exist in the queue or doesn't decrease
+// key's priority function will simply return.
 func (pq *IndexMin) DecreaseKey(key int, priority float32) {
 	if key < 0 || key >= pq.max {
 		return
@@ -111,8 +112,28 @@ func (pq *IndexMin) DecreaseKey(key int, priority float32) {
 	if pq.qp[key] == -1 {
 		return
 	}
+	if pq.keys[key] <= priority {
+		return
+	}
 	pq.keys[key] = priority
 	pq.swim(pq.qp[key])
+}
+
+// IncreaseKey increases key associated with index key to the specified priority.
+// If key is out of bounds or doesn't exist in the queue or doesn't increase
+// key's priority function will simply return.
+func (pq *IndexMin) IncreaseKey(key int, priority float32) {
+	if key < 0 || key >= pq.max {
+		return
+	}
+	if !pq.Contains(key) {
+		return
+	}
+	if pq.keys[key] >= priority {
+		return
+	}
+	pq.keys[key] = priority
+	pq.sink(pq.qp[key])
 }
 
 // Contains returns true if queue contains key and false otherwise.

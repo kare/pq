@@ -66,9 +66,32 @@ func TestDecreaseKey(t *testing.T) {
 	for i, v := range values {
 		pq.Insert(i, v)
 	}
+	pq.DecreaseKey(2, 2)
 	pq.DecreaseKey(2, 0.1)
 	d := pq.DelMin()
 	if d != 2 {
 		t.Errorf("expected key 2, but got %d", d)
+	}
+}
+
+func TestIncreaseKey(t *testing.T) {
+	values := []float32{1, 0, 2}
+	pq := NewIndexMin(20)
+	for i, v := range values {
+		pq.Insert(i, v)
+	}
+	pq.IncreaseKey(1, 7)
+	pq.IncreaseKey(0, 0)
+	d := pq.DelMin()
+	if d != 0 {
+		t.Errorf("expected key 0, but got %d", d)
+	}
+	d = pq.DelMin()
+	if d != 2 {
+		t.Errorf("expected key 2, but got %d", d)
+	}
+	d = pq.DelMin()
+	if d != 1 {
+		t.Errorf("expected key 1, but got %d", d)
 	}
 }
