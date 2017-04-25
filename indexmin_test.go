@@ -42,3 +42,33 @@ func TestDelMinInsertBetweenDelete(t *testing.T) {
 		t.Errorf("expected 3, but got %v", i)
 	}
 }
+
+func TestContains(t *testing.T) {
+	values := []float32{0.7, 0.123, 0.3, 0.453}
+	pq := NewIndexMin(20)
+	for i, v := range values {
+		pq.Insert(i, v)
+	}
+	if pq.Contains(10) {
+		t.Error("pq doesn't contain 10, but reports that it does")
+	}
+	if !pq.Contains(1) {
+		t.Error("pq contains 1, but reports that it doesn't")
+	}
+	if pq.Contains(100) {
+		t.Error("pq doesn''t contain 100, but reports that it does")
+	}
+}
+
+func TestDecreaseKey(t *testing.T) {
+	values := []float32{0.7, 0.123, 0.3, 0.453}
+	pq := NewIndexMin(20)
+	for i, v := range values {
+		pq.Insert(i, v)
+	}
+	pq.DecreaseKey(2, 0.1)
+	d := pq.DelMin()
+	if d != 2 {
+		t.Errorf("expected key 2, but got %d", d)
+	}
+}

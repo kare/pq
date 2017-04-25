@@ -90,6 +90,7 @@ func (pq *IndexMin) Insert(key int, priority float32) {
 // If queue is empty the function returns max.
 func (pq *IndexMin) DelMin() int {
 	if pq.len == 0 {
+		// TODO FIXME
 		return pq.max
 	}
 	min := pq.pq[1]
@@ -115,9 +116,10 @@ func (pq *IndexMin) DecreaseKey(key int, priority float32) {
 }
 
 // Contains returns true if queue contains key and false otherwise.
+// If key is not present in the queue Contains returns false.
 func (pq IndexMin) Contains(key int) bool {
 	if key < 0 || key >= pq.max {
-		panic("index out of bounds")
+		return false
 	}
 	return pq.qp[key] != -1
 }
