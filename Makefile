@@ -3,6 +3,7 @@ default: build
 
 .PHONY: lint
 lint:
+	gofmt -s -w *.go
 	gometalinter ./...
 
 .PHONY: clean
