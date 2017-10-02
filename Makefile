@@ -13,8 +13,7 @@ clean:
 .PHONY: benchmark
 benchmark: clean
 	go test -c
-	./pq.test -test.bench=. -test.count=5 >bench.txt
-	@cat bench.txt
+	./pq.test -test.bench=. -test.count=5 |tee bench.txt
 
 .PHONY: mem-profile
 mem-profile: clean

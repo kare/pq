@@ -1,6 +1,8 @@
 package pq
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestDelMin(t *testing.T) {
 	values := []float32{0.7, 0.123, 0.453, 0.23, 0.657, 0.120, 0.4246, 0.12, 0.9999, 0.123123}
@@ -56,7 +58,7 @@ func TestContains(t *testing.T) {
 		t.Error("pq contains 1, but reports that it doesn't")
 	}
 	if pq.Contains(100) {
-		t.Error("pq doesn''t contain 100, but reports that it does")
+		t.Error("pq doesn't contain 100, but reports that it does")
 	}
 }
 
@@ -93,5 +95,35 @@ func TestIncreaseKey(t *testing.T) {
 	d = pq.DelMin()
 	if d != 1 {
 		t.Errorf("expected key 1, but got %d", d)
+	}
+}
+
+var r int
+
+func BenchmarkInsertAndDelMin(b *testing.B) {
+	testData := []struct {
+		i   int
+		key float32
+	}{
+		{1, 1.2},
+		{2, 2.2},
+		{3, 2.1},
+		{4, 1.1},
+		{5, 4.9},
+		{6, 2.7},
+		{7, 3.3},
+		{8, 0.1},
+		{9, 9.3},
+		{10, 6.3},
+	}
+	b.ResetTimer()
+	p := NewIndexMin(len(testData))
+	for n := 0; n < b.N; n++ {
+		for _, testCase := range testData {
+			p.Insert(testCase.i, testCase.key)
+		}
+		for range testData {
+			r = p.DelMin()
+		}
 	}
 }
