@@ -127,3 +127,31 @@ func BenchmarkInsertAndDelMin(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkDecreaseKey(b *testing.B) {
+	testData := []struct {
+		i   int
+		key float32
+	}{
+		{1, 1.2},
+		{2, 2.2},
+		{3, 2.1},
+		{4, 1.1},
+		{5, 4.9},
+		{6, 2.7},
+		{7, 3.3},
+		{8, 0.1},
+		{9, 9.3},
+		{10, 6.3},
+	}
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		p := NewIndexMin(len(testData))
+		for _, testCase := range testData {
+			p.Insert(testCase.i, testCase.key)
+		}
+		for _, testCase := range testData {
+			p.DecreaseKey(testCase.i, testCase.key-0.1)
+		}
+	}
+}
