@@ -50,15 +50,15 @@ func (pq *IndexMin) exch(i, j int) {
 }
 
 func (pq *IndexMin) swim(k int) {
-	for k > 1 && pq.greater(k/2, k) {
-		pq.exch(k, k/2)
-		k = k / 2
+	for k > 1 && pq.greater(k>>1, k) {
+		pq.exch(k, k>>1)
+		k = k >> 1
 	}
 }
 
 func (pq *IndexMin) sink(k int) {
-	for 2*k <= pq.len {
-		j := 2 * k
+	for k<<1 <= pq.len {
+		j := k << 1
 		if j < pq.len && pq.greater(j, j+1) {
 			j++
 		}
