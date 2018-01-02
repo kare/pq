@@ -39,6 +39,18 @@ func NewIndexMin(max int) *IndexMin {
 	}
 }
 
+// Clear resets and initializes the priority queue to empty state.
+func (pq *IndexMin) Clear() {
+	qp := make([]int, pq.max+1)
+	for i := 0; i <= pq.max; i++ {
+		qp[i] = -1
+	}
+	pq.len = 0
+	pq.pq = make([]int, pq.max+1)
+	pq.qp = qp
+	pq.keys = make([]float32, pq.max+1)
+}
+
 func (pq IndexMin) greater(i, j int) bool {
 	return pq.keys[pq.pq[i]] > pq.keys[pq.pq[j]]
 }

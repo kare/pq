@@ -4,6 +4,34 @@ import (
 	"testing"
 )
 
+func TestClear(t *testing.T) {
+	const max = 50
+	pq := NewIndexMin(max)
+	assertClear(t, pq, max)
+	pq.Insert(1, 2)
+	pq.Insert(2, 3)
+	pq.Clear()
+	assertClear(t, pq, max)
+}
+
+func assertClear(t *testing.T, pq *IndexMin, max int) {
+	if pq.max != max {
+		t.Fatalf("expected pq.max %d, got %d", max, pq.max)
+	}
+	if pq.len != 0 {
+		t.Fatalf("expected pq.len 0, got %d", pq.len)
+	}
+	if len(pq.pq) != max+1 {
+		t.Fatalf("expected len(pq.pq) %d, got %d", max+1, len(pq.pq))
+	}
+	if len(pq.qp) != max+1 {
+		t.Fatalf("expected len(pq.qp) %d, got %d", max+1, len(pq.qp))
+	}
+	if len(pq.keys) != max+1 {
+		t.Fatalf("expected len(pq.keys) %d, got %d", max+1, len(pq.keys))
+	}
+}
+
 func TestDelMin(t *testing.T) {
 	values := []float32{0.7, 0.123, 0.453, 0.23, 0.657, 0.120, 0.4246, 0.12, 0.9999, 0.123123}
 	pq := NewIndexMin(50)
