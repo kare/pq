@@ -15,6 +15,7 @@ func TestClear(t *testing.T) {
 }
 
 func assertClear(t *testing.T, pq *IndexMin, max int) {
+	t.Helper()
 	if pq.max != max {
 		t.Fatalf("expected pq.max %d, got %d", max, pq.max)
 	}
